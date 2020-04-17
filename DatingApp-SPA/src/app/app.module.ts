@@ -3,12 +3,13 @@ import { NgModule } from '@angular/core';
 import {HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import { ValueComponent } from './value/value.component';
+import { ValuesComponent } from './values/values.component';
 
 @NgModule({
    declarations: [
       AppComponent,
-      ValueComponent
+      ValuesComponent,
+      ValuesComponent
    ],
    imports: [
       BrowserModule,
