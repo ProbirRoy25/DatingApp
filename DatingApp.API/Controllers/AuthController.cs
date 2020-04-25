@@ -43,13 +43,15 @@ namespace DatingApp.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(UserForLoginDTO userForLoginDto){
-            var userFromRepo = await _repo.Login(userForLoginDto.Username.ToLower(),userForLoginDto.Password);
+        public async Task<IActionResult> Login(UserForLoginDTO userForLoginDto)
+        {
+            throw new Exception("Computer says no!");
+            var userFromRepo = await _repo.Login(userForLoginDto.Username.ToLower(), userForLoginDto.Password);
 
-            if(userFromRepo==null)
+            if (userFromRepo == null)
                 return Unauthorized();
 
-            var claim = new []{
+            var claim = new[]{
                 new Claim(ClaimTypes.NameIdentifier,userFromRepo.Id.ToString()),
                 new Claim(ClaimTypes.Name,userFromRepo.Username)
             };
@@ -58,9 +60,10 @@ namespace DatingApp.API.Controllers
             //var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:TokenSecret").Value));
 
 
-            var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha512Signature);
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
-            var tokenDescriptor = new SecurityTokenDescriptor{
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
                 Subject = new ClaimsIdentity(claim),
                 Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = creds
@@ -70,7 +73,8 @@ namespace DatingApp.API.Controllers
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return Ok(new { 
+            return Ok(new
+            {
                 token = tokenHandler.WriteToken(token)
             });
         }
